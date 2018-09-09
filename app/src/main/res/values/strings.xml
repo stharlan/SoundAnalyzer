@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">SoundAnalyzer</string>
+    <string name="title_activity_main">Waveform/FFT</string>
+    <string name="title_activity_launch">Audio Analysis</string>
+</resources>
