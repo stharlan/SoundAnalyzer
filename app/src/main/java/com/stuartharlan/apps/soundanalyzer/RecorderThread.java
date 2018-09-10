@@ -57,7 +57,7 @@ public class RecorderThread extends Thread {
                     this.activity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            activity.UpdateRecorderView(buffer, fBuffer);
+                        activity.UpdateRecorderView(buffer, fBuffer);
                         }
                     });
                 }

@@ -113,21 +113,24 @@ public class MainView extends View {
 
         // calculate the magnitudes and max
         double [] fvals = new double[this.AudioData.length];
-        double maxVal = Double.MIN_VALUE;
+        double lmaxVal = Double.MIN_VALUE;
+        double smaxVal = 100.0;
         int maxBin = 1;
         double rp = 0.0;
         double ip = 0.0;
+        double mag_k = 0.0;
         for(int i=1; i<(this.AudioData.length / 2) && i < this.localCanvas .getWidth(); i++) {
             rp = this.FftData[i * 2];
             ip = this.FftData[(i * 2) + 1];
-            fvals[i] = Math.sqrt((rp * rp) + (ip * ip));
+            mag_k = 2.0 * Math.sqrt((rp * rp) + (ip * ip)) / this.BufferSize;
+            fvals[i] = 20.0 * Math.log10(mag_k);
             //fvals[i] = this.FftData[i*2];
-            if(fvals[i] > maxVal) {
-                maxVal = fvals[i];
+            if(fvals[i] > lmaxVal) {
+            //    maxVal = fvals[i];
                 maxBin = i;
             }
         }
-        double logMaxVal = Math.log10(maxVal);
+        //double logMaxVal = Math.log10(maxVal);
 
         // calculate the peak freq
         this.MaxFrequencies[this.MaxFreqIndex] = (int)((float)maxBin * (float)SampleRate / (float)this.AudioData.length);
@@ -187,7 +190,8 @@ public class MainView extends View {
             if(index < (this.AudioData.length / 2)) {
                 //int clr = (int) ((Math.log10(fvals[index]) / logMaxVal) * 255.0);
                 clr = 0;
-                clr = (int) ((fvals[index] / maxVal) * 255.0);
+                clr = (int) ((fvals[index] / smaxVal) * 255.0);
+                if(clr > 255) clr = 255;
                 paint.setARGB(255, clr, 0, 0);
                 //this.localCanvas.drawLine(i, this.localCanvas.getHeight(), i, this.localCanvas.getHeight() - 10, paint);
                 this.localCanvas.drawLine(0, i, 10, i, paint);
