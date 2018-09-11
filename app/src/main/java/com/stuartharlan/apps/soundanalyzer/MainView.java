@@ -43,6 +43,7 @@ public class MainView extends View {
     private boolean IsPaused = false;
     private int SampleRate = 22050;
     private int Multiplier = 1;
+    private double MaxDbVal = 0.0;
 
     private float tx = -1;
     private float ty = -1;
@@ -114,7 +115,7 @@ public class MainView extends View {
         // calculate the magnitudes and max
         double [] fvals = new double[this.AudioData.length];
         double lmaxVal = Double.MIN_VALUE;
-        double smaxVal = 100.0;
+        double smaxVal = 50.0;
         int maxBin = 1;
         double rp = 0.0;
         double ip = 0.0;
@@ -126,10 +127,11 @@ public class MainView extends View {
             fvals[i] = 20.0 * Math.log10(mag_k);
             //fvals[i] = this.FftData[i*2];
             if(fvals[i] > lmaxVal) {
-            //    maxVal = fvals[i];
+                lmaxVal = fvals[i];
                 maxBin = i;
             }
         }
+        this.MaxDbVal = lmaxVal;
         //double logMaxVal = Math.log10(maxVal);
 
         // calculate the peak freq
@@ -277,10 +279,15 @@ public class MainView extends View {
             paint.setARGB(255, 127, 127, 255);
             canvas.drawText(fstr, w - tlen - 10, h - 108, paint);
 
+            //fstr = "Max DB: " + this.MaxDbVal;
+            //tlen = paint.measureText(fstr);
+            //canvas.drawText(fstr, w - tlen - 10, h - 98, paint);
+
             paint.setARGB(127, 127, 127, 255);
             paint.setStrokeWidth(16);
             canvas.drawLine(0, ty, w, ty, paint);
             paint.setStrokeWidth(1);
+
             //canvas.drawLine(tx, 0, tx, h, paint);
             //canvas.drawCircle(tx, ty, 20, paint);
         }
